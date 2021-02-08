@@ -72,20 +72,26 @@ function addClickListener(){
             fetch(POKEMONS_URL, reqObj)
             .then(resp => resp.json())
             .then(pokemon => {
-                const ulNode = e.target.nextElementSibling
-                
-                const liNode = document.createElement('li')
-                liNode.innerText = `${pokemon.nickname} (${pokemon.species})`
-        
-                const buttonReleaseNode = document.createElement('button')
-                buttonReleaseNode.innerText = 'Release'
-                buttonReleaseNode.className = 'release'
-                buttonReleaseNode.dataset.pokemonId = pokemon.id
-                
-                liNode.append(buttonReleaseNode)
-                ulNode.append(liNode)
+                // debugger
+                if (!pokemon.message){
+                    const ulNode = e.target.nextElementSibling
+                    
+                    const liNode = document.createElement('li')
+                    liNode.innerText = `${pokemon.nickname} (${pokemon.species})`
+            
+                    const buttonReleaseNode = document.createElement('button')
+                    buttonReleaseNode.innerText = 'Release'
+                    buttonReleaseNode.className = 'release'
+                    buttonReleaseNode.dataset.pokemonId = pokemon.id
+                    
+                    liNode.append(buttonReleaseNode)
+                    ulNode.append(liNode)
 
-                // console.log(pokemon)
+                    // console.log(pokemon)
+                }
+                else {
+                    alert(pokemon.message);
+                }
             })
         }
         else if (e.target.className == 'release') {
@@ -95,8 +101,11 @@ function addClickListener(){
                 method: "DELETE"
             }
 
-            fetch(POKEMONS_URL + `/${e.target.dataset.pokemonId}`)
+            fetch(POKEMONS_URL + `/${e.target.dataset.pokemonId}`, reqObj)
             .then(resp => resp.json)
+            .then(data => {
+                e.target.parentNode.remove()
+            })
         }
         
     })
